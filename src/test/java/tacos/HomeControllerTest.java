@@ -1,4 +1,4 @@
-package sia.tacocloud;
+package tacos;
 
 import static org.hamcrest.Matchers.containsString;
 import static
@@ -26,6 +26,6 @@ public class HomeControllerTest{
                 .andExpect(status().isOk())
                 .andExpect(view().name("home"))
                 .andExpect(content().string(
-                        containsString("Welcome to...")));
+                        containsString("Welcome to Taco Cloud!")));
     }
 }
