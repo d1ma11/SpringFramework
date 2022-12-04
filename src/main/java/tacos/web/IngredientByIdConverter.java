@@ -11,15 +11,15 @@ import tacos.data.IngredientRepository;
 @Component
 public class IngredientByIdConverter implements Converter<String, Ingredient>
 {
-    private IngredientRepository ingredientRepo;
+    private IngredientRepository ingredientRepository;
 
     @Autowired
-    public IngredientByIdConverter(IngredientRepository ingredientRepo) {
-        this.ingredientRepo = ingredientRepo;
+    public IngredientByIdConverter(IngredientRepository ingredientRepository) {
+        this.ingredientRepository = ingredientRepository;
     }
 
     @Override
     public Ingredient convert(String id) {
-        return ingredientRepo.findById(id).orElse(null);
+        return ingredientRepository.findById(id).orElse(null);
     }
 }
