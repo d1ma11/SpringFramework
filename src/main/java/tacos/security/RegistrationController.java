@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import tacos.data.UserRepository;
 
 @Controller
@@ -14,9 +15,7 @@ public class RegistrationController {
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
 
-    public RegistrationController(
-            UserRepository userRepository,
-            PasswordEncoder passwordEncoder) {
+    public RegistrationController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -26,11 +25,6 @@ public class RegistrationController {
         return "registration";
     }
 
-    /*
-     * Обрабатывает форму, отправленную HTTPS-запросом POST.
-     * Поля формы связываются с объектом RegistrationForm средствами
-     * Spring MVC и передаются в вызов метода processRegistration() для обработки
-     */
     @PostMapping
     public String processRegistration(RegistrationForm form) {
         userRepository.save(form.toUser(passwordEncoder));

@@ -16,10 +16,6 @@ public class RegistrationForm {
     private String zip;
     private String phone;
 
-    /*
-    Метод использует свои свойства для создания нового объекта User,
-    который будет сохраняться processRegistration() в UserRepository
-     */
     public User toUser(PasswordEncoder passwordEncoder) {
         return new User(
                 username, passwordEncoder.encode(password),
