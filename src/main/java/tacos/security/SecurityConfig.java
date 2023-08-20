@@ -34,11 +34,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeHttpRequests()
-                .mvcMatchers("/design", "/orders").hasRole("USER")
-                .anyRequest().permitAll()
-
-                .and()
+                .authorizeRequests(requests -> requests
+                        .mvcMatchers("/design", "/orders").hasRole("USER")
+                        .anyRequest().permitAll())
                 .formLogin(login -> login
                         .loginPage("/login"))
 
