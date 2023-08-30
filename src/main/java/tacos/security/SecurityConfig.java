@@ -2,19 +2,24 @@ package tacos.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
 
 import tacos.data.UserRepository;
 import tacos.model.User;
 
 @Configuration
-public class SecurityConfig {
-    
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -31,18 +36,15 @@ public class SecurityConfig {
         };
     }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
                 .authorizeRequests(requests -> requests
-                        .mvcMatchers("/design", "/orders").hasRole("USER")
-                        .anyRequest().permitAll())
-                .formLogin(login -> login
-                        .loginPage("/login"))
-
-                .logout(logout -> logout
-                        .logoutSuccessUrl("/"))
-                .build();
+                        .antMatchers(HttpMethod.OPTIONS).permitAll()
+                        .antMatchers(HttpMethod.POST, "/api/ingredients")
+                        .hasAuthority("SCOPE_writeIngredients")
+                        .antMatchers(HttpMethod.DELETE, "/api//ingredients")
+                        .hasAuthority("SCOPE_deleteIngredients")
+                        .anyRequest().authenticated()).oauth2ResourceServer(oauth2 -> oauth2.jwt());
     }
-
 }
